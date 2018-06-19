@@ -32,7 +32,7 @@ public class hris {
 	@Test(dependsOnMethods="Login_without_Passsword")
 	public void Login_Successful() throws InterruptedException{
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		login.loginWithInvalidCredentials("gauravjolly", "Gaurav@123#");	
+		login.loginWithInvalidCredentials("gauravjolly", "/*enter-password*/");	
 		Assert.assertNotEquals(driver.getCurrentUrl(), "https://hris.qainfotech.com/login.php");
 		Thread.sleep(2000);
 		List<WebElement> li = driver.findElements(By.className("topbar-list"));
