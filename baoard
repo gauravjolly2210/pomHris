@@ -1,0 +1,92 @@
+package com.qait.automation.snl;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.UUID;
+
+import org.json.JSONObject;
+import org.testng.Assert;
+
+public class BoardObject {
+	Board test;
+	 JSONObject player;
+	 JSONObject data;
+	
+	public BoardObject() throws FileNotFoundException, UnsupportedEncodingException, IOException {
+		test=new Board();
+		//test=new Board(test.getUUID());
+	}
+	
+	
+	public void moreThanFourPlayers(String user1,String user2,String user3,String user4,String user5) throws 
+	FileNotFoundException, UnsupportedEncodingException, PlayerExistsException,
+	GameInProgressException, MaxPlayersReachedExeption, IOException {
+		test.registerPlayer(user1);
+		test.registerPlayer(user2);
+		test.registerPlayer(user3);
+		test.registerPlayer(user4);
+		test.registerPlayer(user5);
+		
+	}
+	
+	public void PlayerExists(String user1,String user2,String user3,String user4) throws
+	PlayerExistsException, FileNotFoundException, UnsupportedEncodingException,
+	GameInProgressException, MaxPlayersReachedExeption, IOException {
+		test.registerPlayer(user1);
+		test.registerPlayer(user2);
+		test.registerPlayer(user3);
+		test.registerPlayer(user4);
+	}
+	
+	public void GameInprogress(String user1,String user2,String user3) throws FileNotFoundException, UnsupportedEncodingException,
+	IOException, PlayerExistsException, GameInProgressException, MaxPlayersReachedExeption, InvalidTurnException {
+		test.registerPlayer(user1);
+		test.registerPlayer(user2);
+		data=test.getData();
+		for(int i = 0; i < data.getJSONArray("players").length(); i++){
+			player= data.getJSONArray("players").getJSONObject(i);
+			UUID id=(UUID) player.get("uuid");
+			test.rollDice(id);
+			break;
+		 }		
+		test.registerPlayer(user3);
+	}
+	
+	public void deletePlayerIfNotPresent() throws FileNotFoundException, UnsupportedEncodingException, NoUserWithSuchUUIDException {
+		UUID uuid=UUID.randomUUID();
+		test.deletePlayer(uuid);
+		
+	}
+	public void deletePlayerIfPresent(String user1,String user2,String user3) throws FileNotFoundException, UnsupportedEncodingException, PlayerExistsException, GameInProgressException, MaxPlayersReachedExeption, IOException, NoUserWithSuchUUIDException, InvalidTurnException {
+		Boolean status=false;
+		test.registerPlayer(user1);
+		test.registerPlayer(user2);
+		test.registerPlayer("rahul");
+		data=test.getData();
+		for(int i = 0; i < data.getJSONArray("players").length(); i++){
+			player= data.getJSONArray("players").getJSONObject(i);
+			String name=player.getString("name");
+			UUID id= (UUID) player.get("uuid");
+			System.out.println(name);
+			System.out.println(id);
+//			if(name.equals(user3))
+//				{
+//					test.deletePlayer(id);
+	//				status=true;
+//					break;
+//				}
+			}
+		for(int i = 0; i < data.getJSONArray("players").length(); i++){
+			
+			player= data.getJSONArray("players").getJSONObject(i);
+			String name=player.getString("name");
+			if(name.equals(user3)) {
+				System.out.println("test failed user not deleted");
+				 
+			}
+			}
+		Assert.assertTrue(status);
+		
+	}
+}
